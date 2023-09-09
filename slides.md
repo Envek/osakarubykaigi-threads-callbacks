@@ -25,10 +25,10 @@ mdc: true
 # Threads, callbacks, and <small class="text-90%">execution context in Ruby</small>
 
 <div class="absolute bottom-0 left-0 w-full px-10 py-8 grid grid-cols-2 justify-items-stretch items-end gap-4">
-  <div class="text-left">
+  <div class="text-left text-xl">
     Andrey Novikov, Evil Martians<br />
-    <small><a href="https://owddm.com/">Osaka Ruby Kaigi #03</a></small><br />
-    <small><time datetime="2023-07-22">09 September 2023</time></small>
+    <small><a href="https://regional.rubykaigi.org/osaka03/">Osaka Ruby Kaigi #03</a></small><br />
+    <small><time datetime="2023-09-09">09 September 2023</time></small>
   </div>
 
   <div class="w-28 h-28 scaled-image justify-self-end">
@@ -47,7 +47,7 @@ mdc: true
   }
 </style>
 
-<!-- 皆さん、こんにちは！　今日、Rubyのブロックについて話しませんか？ -->
+<!-- 皆さん、こんにちは！ -->
 
 ---
 layout: image-right
@@ -55,9 +55,9 @@ image: ./images/20230305_193526.jpg
 class: annotated-list
 ---
 
-# About me
+## About me
 
-Hi, I'm Andrey
+Hi, I'm Andrey (アンドレイ){class="text-xl"}
 
 - Back-end engineer at Evil Martians
 
@@ -78,9 +78,7 @@ Hi, I'm Andrey
 <img src="/images/01_Evil-Martians_Logo_Lurkers_v2.0_on-Transparent.png" class="absolute bottom-0 max-w-80% scaled-image" />
 
 <!--
-まず、自己紹介です。はじめまして、アンドレイと申します。もう一年以上家族と一緒に大阪の近くに住んでいて、原付を乗っています。Rubyなどで開発しています。
-
-それに俺は火星人です。邪悪な火星人です。ですが、我々は、平和目的で地球に来ました。
+はじめまして、アンドレイと申します。もう一年以上大阪の近くに住んでいます。
 -->
 
 ---
@@ -104,46 +102,9 @@ Please come visit us! [^1]
 
 <!--
 
-真面目に言うと、「イービル・マーシャンズ」という会社に勤めています。
+「イービル・マーシャンズ」という会社に勤めていますから、俺は邪悪な火星人です。
 
-我々はスタートアップや大企業のためにプロジェクトを開発したり、コンサルティングしたりしています。バックエンドをもちろん、フロントエンドやデザインも含めてプロダクトをターンキー開発しています。
-
-それに我々の日本基地、オフィスは、ここから歩いて３０分ぐらいのところにあります。江戸堀です。
-
-よろしければ、ぜひ遊びに来てください！　ただ、予めツイッターで連絡してくださいね。元もテレワークしていますので、いつもオフィスにいるわけではありません。
-
--->
-
----
-
-## Let's talk about callbacks…
-
-<div class="text-2xl mt-10">
-
-What callbacks?
-
-```ruby
-class User < ApplicationRecord
-  after_create :send_welcome_email
-end
-```
-
-<v-click>
-
-No, not Rails callbacks,<br />no-no-no!
-
-<iframe src="https://giphy.com/embed/12XMGIWtrHBl5e" class="absolute bottom-5 right-0 w-50% h-50%" frameBorder="0" allowFullScreen></iframe>
-</v-click>
-</div>
-
-<!-- 
-さっそくですが、今日の話題に入りましょう。コールバックについて話しましょう。
-
-どんなコールバックと言うと…
-
-！
-
-いやいや、今日はRubyKaigiですよ、RailsKaigiではない、ActiveRecordのコールバックについて一切話しませんよ！　そしてこれは自体が熱い話題ですね。スキップ!
+火星からよろしく。
 
 -->
 
@@ -153,35 +114,29 @@ No, not Rails callbacks,<br />no-no-no!
 
 <div class="text-2xl mt-10">
 
-```ruby {1-3|1|2|1|2|1|2|1-3}
+```ruby
 3.times do |i|
   puts "Hello, Osaka RubyKaigi #0#{i}!"
 end
 ```
 
-It feels like code between `do` and `end` is following the same flow with surrounding code, right?
+It feels like code between `do` and `end` is in the same flow with surrounding code, right?
 </div>
 
-<v-click class="text-center text-5xl mt-20">
+<v-click>
+<div class="text-center text-5xl mt-32">
 
 **WRONG!**
 
+</div>
 </v-click>
 
 <!--
-代わりに、純粋な Ruby ブロックについて話しましょう。
+では、Rubyのブロックについて話しましょう。
 
-ご存知とおり、Rubyのブロックは、`do` と `end` で囲まれたコードの塊です。
+たとえば、timesというメソッドのループは、他のプログラミング言語にあるforループと似たようなものだと思っている人もいるかもしれませんが。→
 
-ブロックのコードは周囲のコードと同じ流れをたどっているような感じがありますよね？
-
-！！！！！！！！
-
-ほかのプログラミング言語にあるforループと同じようなものだと思っている人もいるかもしれません。
-
-！
-
-でも、それは間違いです！
+違います!
 -->
 
 ---
@@ -197,14 +152,15 @@ greet = proc do |i|
   puts "Hello, Osaka RubyKaigi #0#{i}!"
 end
 
-3.times { |i| greet.call(i) }
-# or
+greet.call(3)
+
+# also
 3.times(&greet)
 ```
 </div>
 
 <!--
-ブロックは周囲のコードから分離して、独立なものです。ブロックはプロックオブジェクトとして。変数に保存できたり、後でメソッドと同じように呼び出すことができます。
+ブロックは独立なオブジェクトです。変数に保存して、後でメソッドと同じように呼び出すことができます。
 -->
 
 ---
@@ -221,9 +177,7 @@ Illustration from the [Ruby under a microscope](https://patshaughnessy.net/ruby-
 
 <!--
 
-前のスライドのタイムズメソッドは、ブロックを引数として受け取って、繰り返しごとそのブロックを呼び出します。
-
-ところで、「Rubyのしくみ」という本をお勧めできます、Rubyの内部の仕組みが詳しく書いてあるので、めっちゃおもしろいです。日本語版もあります。
+実際、timesの例では、ブロックはメソッドの最後の引数になって、メソッドから呼び出されます。
 
 -->
 
@@ -238,7 +192,9 @@ We often use blocks as callbacks to _hook_ our own behavior for someone's else c
 
 
 <!--
-ブロックは変数に保存したり、ブロックを呼び出すメソッドに引数として渡したり、このブロックは後で呼び出されるようになりますので、ブロックはほとんどいつもコールバックだと思います。ブロックはイコールコールバックです。
+ですから、ブロックはほとんどいつもコールバックとして使われています。
+
+ブロックはイコール　コールバックです。
 -->
 
 ---
@@ -247,7 +203,7 @@ We often use blocks as callbacks to _hook_ our own behavior for someone's else c
 
 <div class="text-2xl">
 
-```ruby {1-11|7-9|1-5}
+```ruby
 def some_method(&block)
   block.call
   # and/or
@@ -267,9 +223,9 @@ end
 </div>
 
 <!--
-しかし、重要な問題は、そのブロックがいつ、どこで呼び出されるかということです。
+問題は、そのブロックがいつ、どこで呼び出されるか？
 
-ブロックを受け入れるメソッドの呼び出しを見れば、それを理解できるのでしょうか？
+ブロックを受け入れるメソッドを見れば、それを理解できるのでしょうか？
 -->
 
 ---
@@ -294,7 +250,7 @@ And memorize, memorize, and memorize.
 
 
 <!--
-おそらく、理解方法はありません。メソッドのドキュメントを読んで、ソースコードを読んで、そして覚えるしかないみたいんです。
+おそらく、分かる方法は、→　覚えるしかありません。
 -->
 
 ---
@@ -316,9 +272,7 @@ E.g. `times` will `yield` to the block on every iteration.
 </div>
 
 <!--
-典型的なシナリオをいくつか見てみましょう。
-
-たとえば、Rubyの標準ライブラリの多くのメソッドは、実行中にすぐにブロックを呼び出します。
+Rubyの標準ライブラリの多くのメソッドは、実行中にすぐブロックを呼び出しますが。
 -->
 
 ---
@@ -344,40 +298,8 @@ ActiveRecord callbacks and also `after_commit` from [after_commit_everywhere](ht
 </div>
 
 <!--
-フレームワークとジェムのコールバックは普段、ブロックをどこかに保存して、あとで呼び出します。
-
-たとえば、ActiveRecordの after_commit コールバックは、データベーストランザクションのコミットが成功した後だけに呼び出されます。
+フレームワークとジェムのメソッドは普段、ブロックをどこかに保存して、あとで呼び出せます。
 -->
-
----
-
-## Blocks can start new threads
-
-<div class="text-2xl mt-10">
-
-```ruby
-Thread.new do
-  puts "Hello from new thread!"
-  # Common process memory can be accessed
-end
-
-puts "Hello from the main thread"
-```
-
-or even processes:
-
-```ruby
-Process.fork do
-  puts "Hello from child process!"
-  # Parent process memory can't be accessed
-end
-
-puts "Hello from parent process"
-```
-
-</div>
-
-<!-- 特別な例はスレッドの作成とプロセスのフォークです。提供されたブロックは、新しく作成されたスレッドまたはプロセスへのエントリポイントとして使用されます。-->
 
 ---
 
@@ -385,67 +307,55 @@ puts "Hello from parent process"
 
 <div class="text-2xl mt-10">
 
-```ruby {1-14|1,5|3,9|1,5,9|4,9,12|1-14}
+```ruby {1-14|1,5|3,8-10|4,9,12,14|1-14}
 result = []
 
 work = proc do |arg|
   # Can you tell which thread is executing me?
-  result << arg # I'm closure, I can do that!
+  result << arg # I'm closure, I can access result
 end
 
 Thread.new do
-  work.call "new thread"
+  work.call "from new thread"
 end
 
-work.call "main thread"
+work.call "from main thread"
 
-# And guess what's inside result? 🫠
+# And guess what's inside result now? 🫠
 ```
 
 Can you feel how thread-safety problems are coming?
 </div>
 
 <!--
-さて、話を少し複雑にしてみましょう。
+それから、→
 
-！
+ブロックはクロージャであるため、スコープ内のローカル変数にアクセスできます。→
 
-Rubyブロックはクロージャであるため、スコープ内で以前に定義されたローカル変数にアクセスできます。
+さらに、ブロックを定義するスレッドと実行するスレッドは絶対同じスレッドではありません。→
 
-！
-
-もちろん、以前に定義されたローカル変数に保存されたブロックも呼び出すことができます。
-
-!
-
-このようにして、Rubyブロックはさまざまなスレッドから共有グローバル状態にアクセスできます。
-
-!
-
-この同時に、ブロックはどのスレッドで実行されているかを知るわけありません。
-
-!
-
-スレッド安全性は相変わらず難しいです…
+ブロックはいつ、どのスレッドで、実行されるか、知ることができないんです。→
 -->
 
 ---
 
 ## Different threads
 
-E.g. concurrent-ruby `Promise` uses thread pools to execute blocks.
+E.g. concurrent-ruby `Promise` uses **thread pools** to execute blocks.
 
-```ruby {1-20|2,8|1-5|7-11|13-16|18-20}
+Thread pools doesn't guarantee which thread will execute which block.
+
+```ruby {1-20|2,8|1-5|7-11|13-16|3,9,18-20}
 work1 = proc do
   Thread.current[:state] ||= 'work1'
   raise "Unexpected!" if Thread.current[:state] != 'work1'
-  SecureRandom.hex(4)
+  "result"
 end
 
 work2 = proc do
   Thread.current[:state] ||= 'work2'
   raise "Unexpected!" if Thread.current[:state] != 'work2'
-  SecureRandom.hex(8)
+  "result"
 end
 
 promises = 100.times.flat_map do
@@ -454,26 +364,26 @@ promises = 100.times.flat_map do
 end
 
 Concurrent::Promise.zip(*promises).value!
-#=> Unexpected! (RuntimeError)
-# But it also might be okay (chances are low though)
+#=> Unexpected! (RuntimeError) 💣💥
 ```
 
 <!--
-もっと難しい例を見てみましょう。→
+Thread.currentというHashをご存知でしょうか？→
 
-Thread.currentというHashをご存知でしょうか？　これは、Rubyのスレッドローカル変数です。
-これをブロックからの使用にはご注意してください！ →
+これは、Rubyのスレッドローカル変数です。→
 
-いろいろなブロックは、 → 同じThread.currentのキーを使用して、 →
+二つのブロックは、→ 同じThread.currentのキーを使用することを想像しましょう。→
 
-その同時に同じスレッドで実行されると、正しく動作しない恐れがあります。
+スレッドプールを使うと、ブロックを実行するスレッドを選ぶことができないため、→
+
+遅かれ早かれ、Thread.currentには思いがけないデータを発見します。
 -->
 
 ---
 
 ## Example: NATS client
 
-<div class="text-2xl mt-10">
+<div class="text-xl mt-10">
 
 NATS is a modern, simple, secure and performant message communications system for microservice world.
 
@@ -481,11 +391,15 @@ NATS is a modern, simple, secure and performant message communications system fo
 nats = NATS.connect("demo.nats.io")
 
 nats.subscribe("service") do |msg|
-  msg.respond("pong")
+  Thread.current[:counter] ||= 0
+  Thread.current[:counter] += 1
+  msg.respond(Thread.current[:counter])
 end
 ```
 
-In current versions every subscription is executed in its own separate thread.
+Prior version 2.3.0 every subscription was executed in its own thread.
+
+Code above works as expected.
 </div>
 
 <a href="https://github.com/nats-io/nats-pure.rb"><img alt="nats-pure.rb" src="/images/og-nats-pure.png" class="absolute bottom-0 scaled-image max-w-50%" /></a>
@@ -495,13 +409,11 @@ In current versions every subscription is executed in its own separate thread.
 
 <!-- 
 
-実際の例、NATSというシステムのRubyクライアントを見てみましょう。
+実際の例はNATSというメッセージングシステムのRubyクライアントです。
 
-NATSは、マイクロサービス世界向けの、シンプル、安全かつパフォーマンスの高いメッセージ通信システムです。
+NATSは各サブスクリプションに対応するスレッドを作成します。
 
-Rubyクライアントの使用方法は簡単です。NATSに接続してから、クライアントインスタンスでsubscribeというメソッドを呼び出し、コールバックとしてブロックを提供すると、メッセージが到着するたびにブロックが呼び出されます。
-
-このクライアントの中では、各サブスクリプションの受信メッセージを処理するコールバックを実行するためのスレッドが作成されます。１対１です。
+ということで、渡されたブロックがいつも同じスレッドで実行されますので、このスライドのコードは問題ないです。
 
 -->
 
@@ -512,11 +424,11 @@ image: /images/nats-pure-thread-pool-pull-request.png
 
 <!-- 
 
-唯一の問題は、数万のサブスクリプションがある場合、数万のスレッドではオペレーティング·システムのレベルでコンテキストの切り替えがボトルネックになるため、速度が低下することです。
+ですが、数万のサブスクリプションがある場合、性能が悪くなります。
 
-そこで俺は最適化を行い、これらのスレッドをすべて削除し、固定サイズのスレッドプール内のわずか数十のスレッドに置き換えました。
+ここで俺は最適化を行い、代わりに固定サイズのスレッドプールを導入しました。
 
-これにより、多くのサブスクリプションを持つアプリケーションの処理が大幅に高速化されましたが、副作用もあります。
+性能がずいぶん良くなりましたが、副作用が出てきました。
 -->
 
 ---
@@ -525,12 +437,15 @@ image: /images/nats-pure-thread-pool-pull-request.png
 
 <div class="text-2xl mt-10">
 
+Performance is got much better, but there is a side effect…
+
 ```ruby
 nats = NATS.connect("demo.nats.io")
 
 nats.subscribe("service") do |msg|
-  Thread.current[:handled] ||= 0
-  Thread.current[:handled] += 1
+  Thread.current[:counter] ||= 0
+  Thread.current[:counter] += 1
+  msg.respond(Thread.current[:counter])
 end
 ```
 </div>
@@ -539,15 +454,17 @@ end
 
 Q: So, can I?
 
-A: It depends on gem version! 🤯
+A: Not in 2.3.0+! 🤯
 </div>
 
-Hint: better not to anyway!
+<div class="text-2xl mt-10 mb-8">
+
+**Hint**: better not to anyway!
+
+</div>
 
 <!--
-じゃあ、ブロックでThread.currentを使えるかどうか、どのようにりかいできますか？
-
-知る分けない!　これはgemのバージョンによっても異なることがあります！
+今日リリースされた2.3.0バージョンから、NATSのブロックではThread.currentが使えなくなりました。ブロックは毎回異なるスレッドで実行されますので。
 -->
 
 ---
@@ -567,17 +484,15 @@ Hint: better not to anyway!
 
 Good thing is that you don't have to care about them most of the time.
 
-**Pro Tip:** In Rails use `ActiveSupport::CurrentAttributes` instead of `Thread.current`!
+**Pro Tip:** In Rails use `ActiveSupport::CurrentAttributes` instead of `Thread.current` as every request is going to be executed in different thread!
 
 </div>
 
 <!--
 
-それに、典型的なウェブアプリでは、スレッドプールはいくつかあります。Pumaでも、Sidekiqでも、ActiveRecordの中にも。
+NATSだけじゃなくて、実際のアプリでは、Pumaも、Sidekiqもスレッドプールを使用しています。
 
-幸いなことに、ほとんどの場合、それらを気にする必要はありません。
-
-とにかく、Thread.currentを使わないほうが良いと思います。Railsの場合、ActiveSupport::CurrentAttributesを使うことをお勧めします。
+ということで、各ウェブリクエストと各ジョブは異なるスレッドで実行されますよ！
 
 -->
 
@@ -588,10 +503,9 @@ Good thing is that you don't have to care about them most of the time.
 <div class="mt-15 text-2xl">
 
 - Blocks are primarily used as callbacks
-- Blocks can be executed in a different threads
+- Blocks can be called from other threads
 - And this thread can be different each time!
   - Think twice before using `Thread.current`
-- Blocks can be executed with a different receiver
 
 <hr class="my-15" />
 
@@ -600,13 +514,13 @@ Good thing is that you don't have to care about them most of the time.
 </div>
 
 <!--
-要約すると、次のようになります。
+要すると:
 
 - ブロックはコールバックです
 
-- ブロックは別のスレッドで実行可能
+- ブロックは異なるスレッドで実行される可能性があります。
 
-- 「Thread.current」を使用する前によく考えてください。
+- 「Thread.current」を使用する際には気をつけてください。
 -->
 
 ---
@@ -626,9 +540,9 @@ Tokyo, 27–28 October 2023
 <qr-code url="https://evilmartians.com/events/rails-executor-kaigionrails" caption="Rails Executor talk announce" class="w-60 absolute bottom-10px right-10px" />
 
 <!--
-これでは以上です！
+以上です！
 
-俺は今年の十月の下旬、東京にある「Kaigi on Rails」というカンファレンスに「Rails Executor」に関する発表します。コールバックについてさらに詳しく知りたい方はぜひ参加してください。
+来月もブロックについて話します。東京のKaigi on Railsにぜひ参加してください。
 -->
 
 ---
@@ -660,10 +574,10 @@ Tokyo, 27–28 October 2023
 
 <div>
 
-- <logos-github-icon class="dark:invert" /> [@evilmartians](https://github.com/evilmartians?utm_source=owddm&utm_medium=slides&utm_campaign=imgproxy-is-amazing)
-- <logos-twitter /> [@evilmartians_jp](https://twitter.com/evilmartians_jp/?utm_source=owddm&utm_medium=slides&utm_campaign=imgproxy-is-amazing)
-- <logos-linkedin-icon /> [@evil-martians](https://www.linkedin.com/company/evil-martians/?utm_source=owddm&utm_medium=slides&utm_campaign=imgproxy-is-amazing)
-- <logos-instagram-icon class="dark:invert" /> [@evil.martians](https://www.instagram.com/evil.martians/?utm_source=owddm&utm_medium=slides&utm_campaign=imgproxy-is-amazing)
+- <logos-github-icon class="dark:invert" /> [@evilmartians](https://github.com/evilmartians?utm_source=osakarubykaigi&utm_medium=slides&utm_campaign=threads-callbacks)
+- <logos-twitter /> [@evilmartians_jp](https://twitter.com/evilmartians_jp/?utm_source=osakarubykaigi&utm_medium=slides&utm_campaign=threads-callbacks)
+- <logos-linkedin-icon /> [@evil-martians](https://www.linkedin.com/company/evil-martians/?utm_source=osakarubykaigi&utm_medium=slides&utm_campaign=threads-callbacks)
+- <logos-instagram-icon class="dark:invert" /> [@evil.martians](https://www.instagram.com/evil.martians/?utm_source=osakarubykaigi&utm_medium=slides&utm_campaign=threads-callbacks)
 </div>
 
 <div>
@@ -672,7 +586,7 @@ Tokyo, 27–28 October 2023
 
 <div class="col-span-3">
 
-Our awesome blog: [evilmartians.com/chronicles](https://evilmartians.com/chronicles/?utm_source=owddm&utm_medium=slides&utm_campaign=imgproxy-is-amazing)!
+Our awesome blog: [evilmartians.com/chronicles](https://evilmartians.com/chronicles/?utm_source=osakarubykaigi&utm_medium=slides&utm_campaign=threads-callbacks)!
 
 <p class="text-sm">See these slides at <a href="https://envek.github.io/osakarubykaigi-threads-callbacks/">envek.github.io/osakarubykaigi-threads-callbacks</a></p>
 
@@ -689,7 +603,8 @@ Our awesome blog: [evilmartians.com/chronicles](https://evilmartians.com/chronic
 
 <!--
 
-我が社のブログは、Rubyについての記事は、日本語のの翻訳もあります。ぜひお読みください！
+最後までご視聴してくださって、ありがとうございました！
 
-最後までのご視聴してくださって、ありがとうございました！
+我が社のブログでは、Rubyについての記事がたくさんあります。ぜひお読みください！日本語の翻訳もあります。
+
 -->
