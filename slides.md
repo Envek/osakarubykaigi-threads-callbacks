@@ -51,7 +51,7 @@ mdc: true
 
 ---
 layout: image-right
-image: /images/20230305_193526.jpg
+image: ./images/20230305_193526.jpg
 class: annotated-list
 ---
 
@@ -75,15 +75,13 @@ Hi, I'm Andrey
 
   And also a bicycle to get kids to kindergarten
 
-<img src="images/01_Evil-Martians_Logo_Lurkers_v2.0_on-Transparent.png" class="absolute bottom-0 max-w-80% scaled-image" />
+<img src="/images/01_Evil-Martians_Logo_Lurkers_v2.0_on-Transparent.png" class="absolute bottom-0 max-w-80% scaled-image" />
 
 <!--
 まず、自己紹介です。はじめまして、アンドレイと申します。もう一年以上家族と一緒に大阪の近くに住んでいて、原付を乗っています。Rubyなどで開発しています。
 
 それに俺は火星人です。邪悪な火星人です。ですが、我々は、平和目的で地球に来ました。
 -->
-
- -->
 
 ---
 layout: image-right
@@ -100,7 +98,7 @@ Please come visit us! [^1]
 
 </div>
 
-![Evil Martians logo](images/01_Evil-Martians_Logo_v2.1_RGB.svg)
+![Evil Martians logo](/images/01_Evil-Martians_Logo_v2.1_RGB.svg)
 
 [^1]: Just let us know in advance in e𝕏-Twitter [@evilmartians_jp](https://twitter.com/evilmartians_jp)
 
